@@ -51,6 +51,6 @@ tr > td:first-child {
 	text-align: center;
 }
 
-.phone-cell-problem {
-	color: #FF6868;
+.phone-cell-problem > a {
+	color: #FF6868 !important;
 }

@@ -1,3 +1,5 @@
+var DAYS_OF_WEEK = "monday,tuesday,wednesday,thursday,friday,saturday,sunday".split(",");
+
 Duties = new Mongo.Collection("duties", {
   transform: function(duty) {
     var waiters = [];
@@ -12,16 +14,10 @@ Duties = new Mongo.Collection("duties", {
 Brothers = new Mongo.Collection("brothers");
 Shifts = new Mongo.Collection("shifts", {
   transform: function(shift) {
-    // var available_brothers = [];
-    // shift.available_brothers.forEach(function(brother_id) {
-    //   available_brothers.push(Brothers.findOne(brother_id));
-    // });
-    // shift.available_brothers = available_brothers;
+    shift.day_name = DAYS_OF_WEEK[shift.day_number - 1];
     return shift;
   }
 });
-
-var DAYS_OF_WEEK = "monday,tuesday,wednesday,thursday,friday,saturday,sunday".split(",");
 
 if (Meteor.isClient) {
 
@@ -59,8 +55,23 @@ if (Meteor.isClient) {
 
   Template.phone.rendered = function() {
     // initialize tooltips
+    console.log("phone rendered!");
     this.$('[data-toggle="tooltip"]').tooltip();
   }
+
+  Template.phone.events({
+
+    "click .phone-cell-problem > a": function(event, template) {
+      console.log(template);
+      var number = prompt("Number:");
+      if (number !== null) {
+        Brothers.update(this._id, {$set: {phone_number: number}});
+      }
+      // XXX: we need to trigger re-render to update tooltip
+      // template.view._render();
+    }
+
+  });
 
   Template.slab.helpers({
 

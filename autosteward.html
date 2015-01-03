@@ -124,12 +124,12 @@
   <tr>
     <td>{{first_name}} {{last_name}} ({{dutiesForCurrentBrother.count}})</td>
 
-    <td>i
+    <td>
       {{#each shifts}}
         {{#if currentBrotherHasShift}}
-          <button class="remove btn btn-small btn-success">[{{day_number}} {{waiter_number}}]</button>
+          <button class="remove btn btn-small btn-success">{{day_name}} #{{waiter_number}}</button>
         {{else}}
-          <button class="add btn btn-small btn-danger">[{{day_number}} {{waiter_number}}]</button>
+          <button class="add btn btn-small btn-danger">{{day_name}} #{{waiter_number}}</button>
         {{/if}}
       {{/each}}
     </td>
@@ -142,12 +142,14 @@
   {{#if phone_number}}
   <td class="phone-cell">
     <a href="tel://{{phone_number}}">
-      <span class="glyphicon glyphicon-phone"></span>
+      <span class="glyphicon glyphicon-phone" data-toggle="tooltip" data-placement="top" title="{{phone_number}}"></span>
     </a>
   </td>
   {{else}}
   <td class="phone-cell phone-cell-problem">
-    <span class="glyphicon glyphicon-phone" data-toggle="tooltip" data-placement="top" title="No phone number"></span>
+    <a href="#">
+      <span class="glyphicon glyphicon-phone" data-toggle="tooltip" data-placement="top" title="No phone number"></span>
+    </a>
   </td>
   {{/if}}
 </template>
