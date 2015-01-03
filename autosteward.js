@@ -98,6 +98,13 @@ if (Meteor.isClient) {
       if (!shift) {
         return alert("shift not found, how is that possible?");
       }
+      var duty = Duties.findOne({
+        shift: shift._id,
+        date: ctx.date
+      });
+      if (duty) {
+        Duties.remove(duty._id);
+      }
       Duties.insert({
         shift: shift._id,
         brother: current_brother._id,
@@ -106,7 +113,6 @@ if (Meteor.isClient) {
     },
 
     "click a.unassign-waiter": function() {
-      var current_brother = this;
       var ctx = Template.currentData();
       var shift = Shifts.findOne({
         semester: "2014-spring",
