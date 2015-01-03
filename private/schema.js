@@ -1,23 +1,23 @@
 
 Shift = {
 
-  day: String, // "Monday"
-
-  name: String, // "Waiter 1"
+  day: String, // "monday"
 
   semester: String, // "2014-spring"
 
   time: String, // "3pm"
 
-  available_brothers: [Brother],
+  waiter_number: Number, // "waiter1",
+
+  available_brothers: [Brother]
 
 };
 
 Duty = {
 
-  brother: Brother,
-  
   shift: Shift,
+
+  brother: Brother?,
 
   date: Date, // "Monday, January 4, 2015"
 
@@ -33,8 +33,6 @@ Brother = {
   full_name: String, // "Avi Romanoff"
 
   phone_number: String, // "+1 484 000 1234" (E.164 format)
-
-  available_shifts: [Shift],
 
   // synthesized
   performed_duties: [Duty] // where Duty.brother == self
