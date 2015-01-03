@@ -27,9 +27,9 @@
                 {{#each daysOfCurrentWeek}}
                   <tr>
                     <td>{{formatDate this "dddd"}}</td>
-                    {{> cell day_number=this waiter_number=1}}
-                    {{> cell day_number=this waiter_number=2}}
-                    {{> cell day_number=this waiter_number=3}}
+                    {{> cell date=this waiter_number=1}}
+                    {{> cell date=this waiter_number=2}}
+                    {{> cell date=this waiter_number=3}}
                   </tr>
                 {{/each}}
             </tbody>
@@ -116,12 +116,39 @@
 
 <template name="cell">
   <td>
-<!--     {{#with waiterWithNumberForCurrentDay number}}
-      {{brother.first_name}} {{brother.last_name}}
-    {{/with}} -->
-    {{#each availableWaiters day_number waiter_number}}
-      [{{first_name}} {{last_name}}]
-    {{/each}}
+    <div class="dropdown">
+      {{#if availableWaiters date waiter_number}}
+        <button id="dLabel" type="button" class="btn btn-default" data-toggle="dropdown">
+          {{#with waiter date waiter_number}}
+            {{brother.first_name}} {{brother.last_name}}
+          {{else}}
+            <em>Nobody</em>
+          {{/with}}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+          {{#with waiter date waiter_number}}
+            <li>
+              <a href="#" class="unassign-waiter">
+                <em>Remove {{brother.first_name}}</em>
+              </a>
+            </li>
+          {{/with}}
+          {{#each availableWaiters date waiter_number}}
+            {{#unless currentBrotherIsWaiter}}
+              <li>
+                <a href="#" class="assign-waiter">{{first_name}} {{last_name}}</a>
+              </li>
+            {{/unless}}
+          {{/each}}
+        </ul>
+      {{else}}
+        <em>nobody available</em>
+      {{/if}}
+    </div>
+
+
+
   </td>
 </template>
 

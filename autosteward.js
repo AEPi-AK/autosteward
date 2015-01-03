@@ -51,25 +51,81 @@ if (Meteor.isClient) {
 
   Template.cell.helpers({
 
-    waiterWithNumberForCurrentDay: function(waiter_number) {
-      var day = this;
+    waiter: function(date, waiter_number) {
       var shift = Shifts.findOne({
         semester: "2014-spring",
-        day_number: moment(day).isoWeekday(),
+        day_number: moment(date).isoWeekday(),
         waiter_number: waiter_number
       });
-      if (!shift) return null;
-      return Duties.findOne({shift: shift._id, date: day});
+      if (!shift) return;
+      return Duties.findOne({shift: shift._id, date: date});
     },
 
-    availableWaiters: function(day, waiter_number) {
+    availableWaiters: function(date, waiter_number) {
       var shift = Shifts.findOne({
         semester: "2014-spring",
-        day_number: moment(day).isoWeekday(),
+        day_number: moment(date).isoWeekday(),
         waiter_number: waiter_number
       });
       return shift && shift.available_brothers;
+    },
+
+    currentBrotherIsWaiter: function() {
+      var ctx = Template.parentData();
+      var current_brother = this;
+      var shift = Shifts.findOne({
+        semester: "2014-spring",
+        day_number: moment(ctx.date).isoWeekday(),
+        waiter_number: ctx.waiter_number
+      });
+      var duty = Duties.findOne({shift: shift._id, date: ctx.date});
+      if (!duty) return;
+      return duty.brother._id === current_brother._id;
     }
+
+  });
+
+  Template.cell.events({
+
+    "click a.assign-waiter": function() {
+      var current_brother = this;
+      var ctx = Template.currentData();
+      var shift = Shifts.findOne({
+        semester: "2014-spring",
+        day_number: moment(ctx.date).isoWeekday(),
+        waiter_number: ctx.waiter_number
+      });
+      if (!shift) {
+        return alert("shift not found, how is that possible?");
+      }
+      Duties.insert({
+        shift: shift._id,
+        brother: current_brother._id,
+        date: ctx.date
+      });
+    },
+
+    "click a.unassign-waiter": function() {
+      var current_brother = this;
+      var ctx = Template.currentData();
+      var shift = Shifts.findOne({
+        semester: "2014-spring",
+        day_number: moment(ctx.date).isoWeekday(),
+        waiter_number: ctx.waiter_number
+      });
+      if (!shift) {
+        return alert("shift not found, how is that possible?");
+      }
+      var duty = Duties.findOne({
+        shift: shift._id,
+        date: ctx.date
+      });
+      if (!duty) {
+        return alert("duty not found, how is that possible?");
+      }
+      Duties.remove(duty._id);
+    }
+
   });
 
   Template.phone.rendered = function() {
