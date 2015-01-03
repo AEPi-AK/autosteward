@@ -1,11 +1,11 @@
 
 Shift = {
 
-  day: String, // "monday"
-
   semester: String, // "2014-spring"
 
-  time: String, // "3pm"
+  // time: String, // "3pm"
+
+  day_number: String, // "monday"
 
   waiter_number: Number, // "waiter1",
 
@@ -28,9 +28,6 @@ Brother = {
   first_name: String, // "Avi"
 
   last_name: String, // "Romanoff"
-
-  // synthesized
-  full_name: String, // "Avi Romanoff"
 
   phone_number: String, // "+1 484 000 1234" (E.164 format)
 

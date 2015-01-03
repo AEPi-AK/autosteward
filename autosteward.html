@@ -124,9 +124,13 @@
   <tr>
     <td>{{first_name}} {{last_name}} ({{dutiesForCurrentBrother.count}})</td>
 
-    <td>
-      {{#each shiftsForCurrentBrother}}
-        [{{day}} {{name}}]
+    <td>i
+      {{#each shifts}}
+        {{#if currentBrotherHasShift}}
+          <button class="remove btn btn-small btn-success">[{{day_number}} {{waiter_number}}]</button>
+        {{else}}
+          <button class="add btn btn-small btn-danger">[{{day_number}} {{waiter_number}}]</button>
+        {{/if}}
       {{/each}}
     </td>
 

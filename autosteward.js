@@ -12,6 +12,11 @@ Duties = new Mongo.Collection("duties", {
 Brothers = new Mongo.Collection("brothers");
 Shifts = new Mongo.Collection("shifts", {
   transform: function(shift) {
+    // var available_brothers = [];
+    // shift.available_brothers.forEach(function(brother_id) {
+    //   available_brothers.push(Brothers.findOne(brother_id));
+    // });
+    // shift.available_brothers = available_brothers;
     return shift;
   }
 });
@@ -59,20 +64,49 @@ if (Meteor.isClient) {
 
   Template.slab.helpers({
 
-    shiftsForCurrentBrother: function() {
-      var currentBrother = this;
+    currentBrotherHasShift: function() {
+      return _.contains(this.available_brothers, this.current_brother_id);
+    },
+
+    shifts: function() {
+      if (!_.has(this, "first_name")) {
+        alert("Now ya fucked up!");
+        console.log(this);
+      }
+
+      var current_brother = this;
+
       return Shifts.find({
-        semester: "2014-spring",
-        available_brothers: currentBrother._id
-      }, {sort: {day: 1, waiter_number: 1}});
+        semester: "2014-spring"
+      }, {sort: {day_number: 1, waiter_number: 1}}
+      ).map(function(shift) {
+        shift.current_brother_id = current_brother._id;
+        return shift;
+      });
     },
 
     dutiesForCurrentBrother: function() {
-      var currentBrother = this;
+      var current_brother = this;
       return Duties.find({
-        brother: currentBrother._id
+        brother: current_brother._id
       });
     },
+
+  });
+
+  Template.slab.events({
+
+    "click button.add": function() {
+      Shifts.update(this._id, {
+        $addToSet: {available_brothers: this.current_brother_id}
+      });
+    },
+
+    "click button.remove": function() {
+      Shifts.update(this._id, {
+        $pull: {available_brothers: this.current_brother_id}
+      });
+    }
 
   });
 }
@@ -113,8 +147,8 @@ if (Meteor.isServer) {
       var num_waiters = is_weekend ? 1 : 3;
       while (num_waiters > 0) {
         shifts.push({
-          day: day,
           semester: "2014-spring",
+          day_number: DAYS_OF_WEEK.indexOf(day) + 1,
           waiter_number: num_waiters,
           available_brothers: []
         });
