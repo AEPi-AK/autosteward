@@ -25,7 +25,12 @@
             </thead>
             <tbody>
                 {{#each daysOfCurrentWeek}}
-                  {{> dayRow}}
+                  <tr>
+                    <td>{{formatDate this "dddd"}}</td>
+                    {{> cell day_number=this waiter_number=1}}
+                    {{> cell day_number=this waiter_number=2}}
+                    {{> cell day_number=this waiter_number=3}}
+                  </tr>
                 {{/each}}
             </tbody>
           </table>
@@ -109,25 +114,15 @@
 
 </body>
 
-<template name="dayRow">
-  <tr>
-    <td>{{formatDate this "dddd"}}</td>
-      <td>
-        {{#with waiterWithNumberForCurrentDay 1}}
-          {{brother.first_name}} {{brother.last_name}}
-        {{/with}}
-      </td>
-      <td>
-        {{#with waiterWithNumberForCurrentDay 2}}
-          {{brother.first_name}} {{brother.last_name}}
-        {{/with}}
-      </td>
-      <td>
-        {{#with waiterWithNumberForCurrentDay 3}}
-          {{brother.first_name}} {{brother.last_name}}
-        {{/with}}
-      </td>
-  </tr>
+<template name="cell">
+  <td>
+<!--     {{#with waiterWithNumberForCurrentDay number}}
+      {{brother.first_name}} {{brother.last_name}}
+    {{/with}} -->
+    {{#each availableWaiters day_number waiter_number}}
+      [{{first_name}} {{last_name}}]
+    {{/each}}
+  </td>
 </template>
 
 <template name="slab">

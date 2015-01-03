@@ -6,7 +6,6 @@ Duties = new Mongo.Collection("duties", {
   transform: function(duty) {
     duty.brother = Brothers.findOne(duty.brother);
     duty.shift = Shifts.findOne(duty.shift);
-    console.log(duty);
     return duty;
   }
 });
@@ -14,6 +13,11 @@ Duties = new Mongo.Collection("duties", {
 Shifts = new Mongo.Collection("shifts", {
   transform: function(shift) {
     shift.day_name = DAYS_OF_WEEK[shift.day_number - 1];
+    var available_brothers = [];
+    shift.available_brothers.forEach(function(brother) {
+      available_brothers.push(Brothers.findOne(brother));
+    });
+    shift.available_brothers = available_brothers;
     return shift;
   }
 });
@@ -45,10 +49,10 @@ if (Meteor.isClient) {
 
   });
 
-  Template.dayRow.helpers({
+  Template.cell.helpers({
+
     waiterWithNumberForCurrentDay: function(waiter_number) {
       var day = this;
-      console.log("waiterWithNumberForCurrentDay with", day, waiter_number);
       var shift = Shifts.findOne({
         semester: "2014-spring",
         day_number: moment(day).isoWeekday(),
@@ -56,19 +60,26 @@ if (Meteor.isClient) {
       });
       if (!shift) return null;
       return Duties.findOne({shift: shift._id, date: day});
+    },
+
+    availableWaiters: function(day, waiter_number) {
+      var shift = Shifts.findOne({
+        semester: "2014-spring",
+        day_number: moment(day).isoWeekday(),
+        waiter_number: waiter_number
+      });
+      return shift && shift.available_brothers;
     }
   });
 
   Template.phone.rendered = function() {
     // initialize tooltips
-    console.log("phone rendered!");
     this.$('[data-toggle="tooltip"]').tooltip();
   }
 
   Template.phone.events({
 
     "click .phone-cell-problem > a": function(event, template) {
-      console.log(template);
       var number = prompt("Number:");
       if (number !== null) {
         Brothers.update(this._id, {$set: {phone_number: number}});
@@ -82,7 +93,10 @@ if (Meteor.isClient) {
   Template.slab.helpers({
 
     currentBrotherHasShift: function() {
-      return _.contains(this.available_brothers, this.current_brother_id);
+      return _.contains(
+        _.pluck(this.available_brothers, "_id"),
+        this.current_brother_id
+      );
     },
 
     shifts: function() {
