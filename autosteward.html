@@ -143,15 +143,23 @@
 <template name="slab">
   <tr>
     <td>{{first_name}} {{last_name}} (?)</td>
-    <td>Stuff goes here</td>
+    {{>schedule}}
     {{>phone}}
   </tr>
+</template>
+
+<template name="schedule">
+  <td>
+  {{#each shifts}}
+    [{{day}} {{name}}]
+  {{/each}}
+  </td>
 </template>
 
 <template name="phone">
   {{#if phone_number}}
   <td class="phone-cell">
-    <a href="tel://1-800-123-4567">
+    <a href="tel://{{phone_number}}">
       <span class="glyphicon glyphicon-phone"></span>
     </a>
   </td>
@@ -161,9 +169,3 @@
   </td>
   {{/if}}
 </template>
-
-<!-- 
-<template name="hello">
-  <button type="button" class="btn btn-default">Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template> -->

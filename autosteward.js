@@ -1,4 +1,7 @@
+Shifts = new Mongo.Collection("shifts");
+Duties = new Mongo.Collection("duties");
 Brothers = new Mongo.Collection("brothers");
+
 
 if (Meteor.isClient) {
 
@@ -14,6 +17,16 @@ if (Meteor.isClient) {
     // initialize tooltips
     this.$('[data-toggle="tooltip"]').tooltip();
   }
+
+  Template.schedule.helpers({
+
+    shifts: function() {
+      return Shifts.find({
+        semester: "2014-spring"
+      }, {sort: {day: 1, name: 1}});
+    }
+
+  });
 
   // // counter starts at 0
   // Session.setDefault("counter", 0);
