@@ -16,7 +16,13 @@ Shifts = new Mongo.Collection("shifts", {
   }
 });
 
+var DAYS_OF_WEEK = "monday,tuesday,wednesday,thursday,friday,saturday,sunday".split(",");
+
 if (Meteor.isClient) {
+
+  Template.registerHelper("formatDate", function(date, format_string) {
+    return moment(date).format(format_string);
+  });
 
   Template.body.helpers({
 
@@ -101,9 +107,8 @@ if (Meteor.isServer) {
     ]);
 
     var shifts = [];
-    var days = "monday,tuesday,wednesday,thursday,friday,saturday,sunday".split(",");
 
-    days.forEach(function(day) {
+    DAYS_OF_WEEK.forEach(function(day) {
       var is_weekend = _.contains(["saturday", "sunday"], day);
       var num_waiters = is_weekend ? 1 : 3;
       while (num_waiters > 0) {
@@ -116,7 +121,7 @@ if (Meteor.isServer) {
         num_waiters -= 1;
       }
     });
-    
+
     addFixtures(Shifts, shifts);
 
   });

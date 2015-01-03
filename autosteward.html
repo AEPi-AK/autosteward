@@ -27,42 +27,6 @@
                 {{#each daysOfCurrentWeek}}
                   {{> dayRow}}
                 {{/each}}
-<!--                 <tr>
-                    <td>Monday</td>
-                    <td>Adler</td>
-                    <td>Somers</td>
-                    <td>Solomon</td>
-                </tr>
-                <tr>
-                    <td>Tuesday</td>
-                    <td>Adler</td>
-                    <td>Somers</td>
-                    <td>Solomon</td>
-                </tr>
-                <tr>
-                    <td>Wednesday</td>
-                    <td>Adler</td>
-                    <td>Somers</td>
-                    <td>Solomon</td>
-                </tr>
-                <tr>
-                    <td>Thursday</td>
-                    <td>Adler</td>
-                    <td>Somers</td>
-                    <td>Solomon</td>
-                </tr>
-                <tr>
-                    <td>Saturday</td>
-                    <td></td>
-                    <td></td>
-                    <td>Solomon</td>
-                </tr>
-                <tr>
-                    <td>Sunday</td>
-                    <td></td>
-                    <td></td>
-                    <td>Solomon</td>
-                </tr> -->
             </tbody>
           </table>
         </div>
@@ -147,12 +111,12 @@
 
 <template name="dayRow">
   <tr>
-    <td>{{this}}</td>
-      {{#if waiters}}
+    <td>{{formatDate this "dddd"}}</td>
+<!--       {{#if waiters}}
         {{#each brothersOnDutyForDay}}
         <td>{{first_name}} {{last_name}}</td>
         {{/each}}
-      {{/if}}
+      {{/if}} -->
   </tr>
 </template>
 
