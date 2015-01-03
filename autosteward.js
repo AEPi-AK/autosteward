@@ -31,7 +31,7 @@ if (Meteor.isClient) {
   Template.body.helpers({
 
     brothers: function() {
-      return Brothers.find({}, {sort: {last_name: 1}});
+      return Brothers.find({}, {sort: {duty_count: 1}});
     },
 
     week: function() {
@@ -104,12 +104,14 @@ if (Meteor.isClient) {
       });
       if (duty) {
         Duties.remove(duty._id);
+        Brothers.update(duty.brother, {$inc: {duty_count: -1}});
       }
       Duties.insert({
         shift: shift._id,
         brother: current_brother._id,
         date: ctx.date
       });
+      Brothers.update(current_brother._id, {$inc: {duty_count: 1}});
     },
 
     "click a.unassign-waiter": function() {
@@ -129,6 +131,7 @@ if (Meteor.isClient) {
       if (!duty) {
         return alert("duty not found, how is that possible?");
       }
+      Brothers.update(duty.brother, {$inc: {duty_count: -1}});
       Duties.remove(duty._id);
     }
 
@@ -176,14 +179,7 @@ if (Meteor.isClient) {
         shift.current_brother_id = current_brother._id;
         return shift;
       });
-    },
-
-    dutiesForCurrentBrother: function() {
-      var current_brother = this;
-      return Duties.find({
-        brother: current_brother._id
-      });
-    },
+    }
 
   });
 
@@ -220,16 +216,19 @@ if (Meteor.isServer) {
         first_name: "Sam",
         last_name: "Zbarsky",
         phone_number: null,
+        duty_count: 0
       },
       {
         first_name: "Avi",
         last_name: "Romanoff",
         phone_number: "+1-484-431-6296",
+        duty_count: 0
       },
       {
         first_name: "Michael",
         last_name: "Solomon",
         phone_number: null,
+        duty_count: 0
       }
     ]);
 
