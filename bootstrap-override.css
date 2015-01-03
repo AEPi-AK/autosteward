@@ -24,10 +24,11 @@ tr > td:first-child {
 }
 
 .pager {
-	font-size: 30pt;
+	font-size: 50px;
 	text-align: right;
 	vertical-align: middle;
 	opacity: 0.95;
+	marign-top: 30px !important;
 }
 
 .footer {
@@ -43,4 +44,13 @@ tr > td:first-child {
 	display: flex;
 	-webkit-align-items: center;
 	align-items: center;
+}
+
+.phone-cell {
+	font-size: 1.8em;
+	text-align: center;
+}
+
+.phone-cell-problem {
+	color: #FF6868;
 }

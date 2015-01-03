@@ -4,7 +4,7 @@
 </head>
 
 <body>
-  <h1>Schedule</h1>
+<!--   <h1>Schedule</h1>
   <div class="container">
       <div class="row vertical-align">
         <div class="col-md-1 pager">
@@ -123,13 +123,47 @@
       <div class="footer">
         <span>&copy; 2014 AEPi Alpha Kappa</span>
       </div>
+    </div> -->
+
+    <h1>Roster</h1>
+    <div class="container">
+      <div class="row vertical-align">
+        <table class="table table-bordered table-striped">
+        <tbody>
+          {{#each brothers}}
+            {{> slab}}
+          {{/each}}
+        </tbody>
+        </table>
+      </div>
     </div>
-  <div style="display:none">
-      {{> hello}}
-  </div>
+
 </body>
 
+<template name="slab">
+  <tr>
+    <td>{{first_name}} {{last_name}} (?)</td>
+    <td>Stuff goes here</td>
+    {{>phone}}
+  </tr>
+</template>
+
+<template name="phone">
+  {{#if phone_number}}
+  <td class="phone-cell">
+    <a href="tel://1-800-123-4567">
+      <span class="glyphicon glyphicon-phone"></span>
+    </a>
+  </td>
+  {{else}}
+  <td class="phone-cell phone-cell-problem">
+    <span class="glyphicon glyphicon-phone" data-toggle="tooltip" data-placement="top" title="No phone number"></span>
+  </td>
+  {{/if}}
+</template>
+
+<!-- 
 <template name="hello">
   <button type="button" class="btn btn-default">Click Me</button>
   <p>You've pressed the button {{counter}} times.</p>
-</template>
+</template> -->
