@@ -112,11 +112,21 @@
 <template name="dayRow">
   <tr>
     <td>{{formatDate this "dddd"}}</td>
-<!--       {{#if waiters}}
-        {{#each brothersOnDutyForDay}}
-        <td>{{first_name}} {{last_name}}</td>
-        {{/each}}
-      {{/if}} -->
+      <td>
+        {{#with waiterWithNumberForCurrentDay 1}}
+          {{brother.first_name}} {{brother.last_name}}
+        {{/with}}
+      </td>
+      <td>
+        {{#with waiterWithNumberForCurrentDay 2}}
+          {{brother.first_name}} {{brother.last_name}}
+        {{/with}}
+      </td>
+      <td>
+        {{#with waiterWithNumberForCurrentDay 3}}
+          {{brother.first_name}} {{brother.last_name}}
+        {{/with}}
+      </td>
   </tr>
 </template>
 
@@ -147,7 +157,7 @@
   </td>
   {{else}}
   <td class="phone-cell phone-cell-problem">
-    <a href="#">
+    <a class="add-phone" href="#">
       <span class="glyphicon glyphicon-phone" data-toggle="tooltip" data-placement="top" title="No phone number"></span>
     </a>
   </td>

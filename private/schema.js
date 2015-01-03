@@ -5,7 +5,7 @@ Shift = {
 
   // time: String, // "3pm"
 
-  day_number: String, // "monday"
+  day_number: Number, // "monday"
 
   waiter_number: Number, // "waiter1",
 

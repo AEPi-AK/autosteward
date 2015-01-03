@@ -1,17 +1,16 @@
 var DAYS_OF_WEEK = "monday,tuesday,wednesday,thursday,friday,saturday,sunday".split(",");
 
+Brothers = new Mongo.Collection("brothers");
+
 Duties = new Mongo.Collection("duties", {
   transform: function(duty) {
-    var waiters = [];
-    duty.waiters.forEach(function(brother_id) {
-      waiters.push(Brothers.findOne(brother_id));
-    });
-    duty.waiters = waiters;
+    duty.brother = Brothers.findOne(duty.brother);
+    duty.shift = Shifts.findOne(duty.shift);
+    console.log(duty);
     return duty;
   }
 });
 
-Brothers = new Mongo.Collection("brothers");
 Shifts = new Mongo.Collection("shifts", {
   transform: function(shift) {
     shift.day_name = DAYS_OF_WEEK[shift.day_number - 1];
@@ -47,9 +46,16 @@ if (Meteor.isClient) {
   });
 
   Template.dayRow.helpers({
-    brothersOnDutyForDay: function() {
+    waiterWithNumberForCurrentDay: function(waiter_number) {
       var day = this;
-      return Duties.findOne({date: day}, {sort: {name: 1}});
+      console.log("waiterWithNumberForCurrentDay with", day, waiter_number);
+      var shift = Shifts.findOne({
+        semester: "2014-spring",
+        day_number: moment(day).isoWeekday(),
+        waiter_number: waiter_number
+      });
+      if (!shift) return null;
+      return Duties.findOne({shift: shift._id, date: day});
     }
   });
 
