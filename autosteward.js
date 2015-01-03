@@ -1,6 +1,15 @@
-Shifts = new Mongo.Collection("shifts");
 Duties = new Mongo.Collection("duties");
 Brothers = new Mongo.Collection("brothers");
+Shifts = new Mongo.Collection("shifts", {
+  transform: function(shift) {
+    // var available_brothers = [];
+    // _.pluck(shift, "available_brothers").forEach(function(brother_id) {
+    //   available_brothers.push(Brothers.findOne(brother_id));
+    // });
+    // shift.available_brothers = available_brothers;
+    return shift;
+  }
+});
 
 
 if (Meteor.isClient) {
@@ -9,7 +18,7 @@ if (Meteor.isClient) {
 
     brothers: function() {
       return Brothers.find({}, {sort: {last_name: 1}});
-    }
+    },
 
   });
 
@@ -18,13 +27,22 @@ if (Meteor.isClient) {
     this.$('[data-toggle="tooltip"]').tooltip();
   }
 
-  Template.schedule.helpers({
+  Template.slab.helpers({
 
-    shifts: function() {
+    shiftsForCurrentBrother: function() {
+      var currentBrother = this;
       return Shifts.find({
-        semester: "2014-spring"
+        semester: "2014-spring",
+        available_brothers: currentBrother._id
       }, {sort: {day: 1, name: 1}});
-    }
+    },
+
+    dutiesForCurrentBrother: function() {
+      var currentBrother = this;
+      return Duties.find({
+        brother: currentBrother._id
+      });
+    },
 
   });
 

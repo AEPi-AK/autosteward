@@ -142,18 +142,16 @@
 
 <template name="slab">
   <tr>
-    <td>{{first_name}} {{last_name}} (?)</td>
-    {{>schedule}}
+    <td>{{first_name}} {{last_name}} ({{dutiesForCurrentBrother.count}})</td>
+
+    <td>
+      {{#each shiftsForCurrentBrother}}
+        [{{day}} {{name}}]
+      {{/each}}
+    </td>
+
     {{>phone}}
   </tr>
-</template>
-
-<template name="schedule">
-  <td>
-  {{#each shifts}}
-    [{{day}} {{name}}]
-  {{/each}}
-  </td>
 </template>
 
 <template name="phone">
