@@ -4,15 +4,13 @@
 </head>
 
 <body>
-  <h1>Schedule</h1>
-
   <div class="container">
     <div class="row vertical-align">
       <div class="col-md-1 pager">
         &#x25C0;
       </div>
-      <div class="col-md-5">
-        <h2>Week of <span>{{week.format "MMMM D"}}</span></h2>
+      <div class="col-md-10">
+        <h1>Week of <span>{{week.format "MMMM D"}}</span></h1>
         <div class="panel panel-default">
           <table class="table table-striped table-bordered">
             <thead>
@@ -36,59 +34,6 @@
           </table>
         </div>
       </div>
-      <div class="col-md-5">
-        <h2>Week of <span>November 17</span></h2>
-          <div class="panel panel-default">
-            <table class="table table-striped table-bordered">
-              <thead>
-                  <tr>
-                      <th></th>
-                      <th>Waiter 1</th>
-                      <th>Waiter 2</th>
-                      <th>Waiter 3</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <td>Mon</td>
-                      <td>Adler</td>
-                      <td>Somers</td>
-                      <td>Solomon</td>
-                  </tr>
-                  <tr>
-                      <td>Tues</td>
-                      <td>Adler</td>
-                      <td>Somers</td>
-                      <td>Solomon</td>
-                  </tr>
-                  <tr>
-                      <td>Wed</td>
-                      <td>Adler</td>
-                      <td>Somers</td>
-                      <td>Solomon</td>
-                  </tr>
-                  <tr>
-                      <td>Thu</td>
-                      <td>Adler</td>
-                      <td>Somers</td>
-                      <td>Solomon</td>
-                  </tr>
-                  <tr>
-                      <td>Sat</td>
-                      <td></td>
-                      <td></td>
-                      <td>Solomon</td>
-                  </tr>
-                  <tr>
-                      <td>Sun</td>
-                      <td></td>
-                      <td></td>
-                      <td>Solomon</td>
-                  </tr>
-              </tbody>
-            </table>
-          </div>
-      </div>
       <div class="col-md-1 pager">
           &#x25B6;
       </div>
@@ -109,7 +54,7 @@
   </div>
 
   <div class="footer">
-    <span>&copy; 2014 AEPi Alpha Kappa</span>
+    <span>&copy; 2015 AEPi Alpha Kappa</span>
   </div>
 
 </body>
@@ -120,7 +65,7 @@
       {{#if availableWaiters date waiter_number}}
         <button id="dLabel" type="button" class="btn btn-default" data-toggle="dropdown">
           {{#with waiter date waiter_number}}
-            {{brother.first_name}} {{brother.last_name}}
+            {{first_name}} {{last_name}} ({{duty_count}})
           {{else}}
             <em>Nobody</em>
           {{/with}}
@@ -137,7 +82,7 @@
           {{#each availableWaiters date waiter_number}}
             {{#unless currentBrotherIsWaiter}}
               <li>
-                <a href="#" class="assign-waiter">{{first_name}} {{last_name}}</a>
+                <a href="#" class="assign-waiter">{{first_name}} {{last_name}} ({{duty_count}})</a>
               </li>
             {{/unless}}
           {{/each}}

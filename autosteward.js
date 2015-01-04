@@ -13,11 +13,11 @@ Duties = new Mongo.Collection("duties", {
 Shifts = new Mongo.Collection("shifts", {
   transform: function(shift) {
     shift.day_name = DAYS_OF_WEEK[shift.day_number - 1];
-    var available_brothers = [];
-    shift.available_brothers.forEach(function(brother) {
-      available_brothers.push(Brothers.findOne(brother));
-    });
-    shift.available_brothers = available_brothers;
+    // var available_brothers = [];
+    // shift.available_brothers.forEach(function(brother) {
+    //   available_brothers.push(Brothers.findOne(brother));
+    // });
+    // shift.available_brothers = available_brothers;
     return shift;
   }
 });
@@ -58,7 +58,9 @@ if (Meteor.isClient) {
         waiter_number: waiter_number
       });
       if (!shift) return;
-      return Duties.findOne({shift: shift._id, date: date});
+      var duty = Duties.findOne({shift: shift._id, date: date});
+      if (!duty) return;
+      return Brothers.findOne(duty.brother);
     },
 
     availableWaiters: function(date, waiter_number) {
@@ -67,7 +69,13 @@ if (Meteor.isClient) {
         day_number: moment(date).isoWeekday(),
         waiter_number: waiter_number
       });
-      return shift && shift.available_brothers;
+      // XXX: Race condition guard
+      if (!shift) return;
+      return Brothers.find({
+        _id: {$in: shift.available_brothers} 
+      }, {
+        sort: {duty_count: 1}
+      });
     },
 
     currentBrotherIsWaiter: function() {
@@ -104,7 +112,7 @@ if (Meteor.isClient) {
       });
       if (duty) {
         Duties.remove(duty._id);
-        Brothers.update(duty.brother, {$inc: {duty_count: -1}});
+        Brothers.update(duty.brother._id, {$inc: {duty_count: -1}});
       }
       Duties.insert({
         shift: shift._id,
@@ -131,7 +139,7 @@ if (Meteor.isClient) {
       if (!duty) {
         return alert("duty not found, how is that possible?");
       }
-      Brothers.update(duty.brother, {$inc: {duty_count: -1}});
+      Brothers.update(duty.brother._id, {$inc: {duty_count: -1}});
       Duties.remove(duty._id);
     }
 
@@ -149,7 +157,7 @@ if (Meteor.isClient) {
       if (number !== null) {
         Brothers.update(this._id, {$set: {phone_number: number}});
       }
-      // XXX: we need to trigger re-render to update tooltip
+      // FIXME: we need to trigger re-render to update tooltip
       // template.view._render();
     }
 
@@ -158,10 +166,7 @@ if (Meteor.isClient) {
   Template.slab.helpers({
 
     currentBrotherHasShift: function() {
-      return _.contains(
-        _.pluck(this.available_brothers, "_id"),
-        this.current_brother_id
-      );
+      return _.contains(this.available_brothers, this.current_brother_id);
     },
 
     shifts: function() {
