@@ -1,38 +1,35 @@
 
 Shift = {
 
-  semester: String, // "2014-spring"
+  semester: String, // e.g. "2014-spring"
 
-  // time: String, // "3pm"
+  day_number: Number, // {1,2,3,4,5,6,7} (ISO weekday)
 
-  day_number: Number, // "monday"
+  waiter_number: Number, // {1,2,3}
 
-  waiter_number: Number, // "waiter1",
-
-  available_brothers: [Brother]
+  available_brothers: [Brother._id]
 
 };
 
 Duty = {
 
-  shift: Shift,
+  shift: Shift._id,
 
-  brother: Brother?,
+  brother: Brother._id,
 
-  date: Date, // "Monday, January 4, 2015"
+  date: Date, // must be UTC and set to 12:00 a.m.
 
 };
 
 Brother = {
 
-  first_name: String, // "Avi"
+  first_name: String, // e.g. "Avi"
 
-  last_name: String, // "Romanoff"
+  last_name: String, // e.g. "Romanoff"
 
-  phone_number: String, // "+1 484 000 1234" (E.164 format)
+  phone_number: String, // e.g. "+1 484 000 1234" (E.164 format)
 
-  // synthesized
-  performed_duties: [Duty] // where Duty.brother == self
+  duty_count: Number, // read-only denormalization, never set directly
 
 };
 
