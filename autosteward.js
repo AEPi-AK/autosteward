@@ -13,11 +13,6 @@ Duties = new Mongo.Collection("duties", {
 Shifts = new Mongo.Collection("shifts", {
   transform: function(shift) {
     shift.day_name = DAYS_OF_WEEK[shift.day_number - 1];
-    // var available_brothers = [];
-    // shift.available_brothers.forEach(function(brother) {
-    //   available_brothers.push(Brothers.findOne(brother));
-    // });
-    // shift.available_brothers = available_brothers;
     return shift;
   }
 });
@@ -35,16 +30,16 @@ if (Meteor.isClient) {
     },
 
     week: function() {
-      return moment().startOf('isoweek');
+      return moment().startOf('isoweek').toDate();
     },
 
-    daysOfCurrentWeek: function() {
-      var days = [];
+    datesOfCurrentWeek: function() {
+      var dates = [];
       var monday = moment().startOf('isoweek');
       for (var i = 1; i < 8; i++) {
-        days.push(monday.clone().isoWeekday(i).toDate());
+        dates.push(monday.clone().isoWeekday(i).toDate());
       }
-      return days;
+      return dates;
     },
 
   });
@@ -143,16 +138,10 @@ if (Meteor.isClient) {
         day_number: moment(ctx.date).isoWeekday(),
         waiter_number: ctx.waiter_number
       });
-      if (!shift) {
-        return alert("shift not found, how is that possible?");
-      }
       var duty = Duties.findOne({
         shift: shift._id,
         date: ctx.date
       });
-      if (!duty) {
-        return alert("duty not found, how is that possible?");
-      }
       Brothers.update(duty.brother._id, {$inc: {duty_count: -1}});
       Duties.remove(duty._id);
     }
@@ -184,11 +173,6 @@ if (Meteor.isClient) {
     },
 
     shifts: function() {
-      if (!_.has(this, "first_name")) {
-        alert("Now ya fucked up!");
-        console.log(this);
-      }
-
       var current_brother = this;
 
       return Shifts.find({
