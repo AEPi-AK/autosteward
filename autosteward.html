@@ -62,7 +62,7 @@
 <template name="cell">
   <td>
     <div class="dropdown">
-      {{#if availableWaiters date waiter_number}}
+      {{#if anyAvailableWaiters date waiter_number}}
         <button id="dLabel" type="button" class="btn btn-default" data-toggle="dropdown">
           {{#with waiter date waiter_number}}
             {{first_name}} {{last_name}} ({{duty_count}})

@@ -69,7 +69,6 @@ if (Meteor.isClient) {
         day_number: moment(date).isoWeekday(),
         waiter_number: waiter_number
       });
-      // XXX: Race condition guard
       if (!shift) return;
       return Brothers.find({
         _id: {$in: shift.available_brothers} 
@@ -77,6 +76,21 @@ if (Meteor.isClient) {
         sort: {duty_count: 1}
       });
     },
+
+    anyAvailableWaiters: function(date, waiter_number) {
+      var shift = Shifts.findOne({
+        semester: "2014-spring",
+        day_number: moment(date).isoWeekday(),
+        waiter_number: waiter_number
+      });
+      if (!shift) return;
+      return Brothers.find({
+        _id: {$in: shift.available_brothers} 
+      }, {
+        sort: {duty_count: 1}
+      }).count() > 0;
+    },
+
 
     currentBrotherIsWaiter: function() {
       var ctx = Template.parentData();
