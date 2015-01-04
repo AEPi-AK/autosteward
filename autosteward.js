@@ -1,15 +1,7 @@
 var DAYS_OF_WEEK = "monday,tuesday,wednesday,thursday,friday,saturday,sunday".split(",");
 
 Brothers = new Mongo.Collection("brothers");
-
-Duties = new Mongo.Collection("duties", {
-  transform: function(duty) {
-    duty.brother = Brothers.findOne(duty.brother);
-    duty.shift = Shifts.findOne(duty.shift);
-    return duty;
-  }
-});
-
+Duties = new Mongo.Collection("duties");
 Shifts = new Mongo.Collection("shifts", {
   transform: function(shift) {
     shift.day_name = DAYS_OF_WEEK[shift.day_number - 1];
@@ -26,7 +18,7 @@ if (Meteor.isClient) {
   Template.body.helpers({
 
     brothers: function() {
-      return Brothers.find({}, {sort: {duty_count: 1}});
+      return Brothers.find({}, {sort: {duty_count: 1, last_name: 1}});
     },
 
     week: function() {
@@ -34,37 +26,34 @@ if (Meteor.isClient) {
     },
 
     datesOfCurrentWeek: function() {
-      var dates = [];
       var monday = moment().startOf('isoweek');
-      for (var i = 1; i < 8; i++) {
-        dates.push(monday.clone().isoWeekday(i).toDate());
-      }
-      return dates;
+      return _.range(1, 8).map(function(i) {
+        return monday.clone().isoWeekday(i).toDate();
+      });
     },
 
   });
 
   Template.cell.helpers({
 
-    waiter: function(date, waiter_number) {
-      var shift = Shifts.findOne({
+    shift: function(date, waiter_number) {
+      return Shifts.findOne({
         semester: "2014-spring",
         day_number: moment(date).isoWeekday(),
         waiter_number: waiter_number
       });
-      if (!shift) return;
-      var duty = Duties.findOne({shift: shift._id, date: date});
+    },
+
+    waiter: function() {
+      var shift = this;
+      var ctx = Template.parentData();
+      var duty = Duties.findOne({shift: shift._id, date: ctx.date});
       if (!duty) return;
       return Brothers.findOne(duty.brother);
     },
 
-    availableWaiters: function(date, waiter_number) {
-      var shift = Shifts.findOne({
-        semester: "2014-spring",
-        day_number: moment(date).isoWeekday(),
-        waiter_number: waiter_number
-      });
-      if (!shift) return;
+    availableWaiters: function() {
+      var shift = this;
       return Brothers.find({
         _id: {$in: shift.available_brothers} 
       }, {
@@ -72,32 +61,19 @@ if (Meteor.isClient) {
       });
     },
 
-    anyAvailableWaiters: function(date, waiter_number) {
-      var shift = Shifts.findOne({
-        semester: "2014-spring",
-        day_number: moment(date).isoWeekday(),
-        waiter_number: waiter_number
-      });
-      if (!shift) return;
+    anyAvailableWaiters: function() {
+      var shift = this;
       return Brothers.find({
         _id: {$in: shift.available_brothers} 
-      }, {
-        sort: {duty_count: 1}
       }).count() > 0;
     },
 
-
-    currentBrotherIsWaiter: function() {
-      var ctx = Template.parentData();
-      var current_brother = this;
-      var shift = Shifts.findOne({
-        semester: "2014-spring",
-        day_number: moment(ctx.date).isoWeekday(),
-        waiter_number: ctx.waiter_number
-      });
+    brotherIsWaiter: function(brother) {
+      var shift = Template.parentData();
+      var ctx = Template.parentData(2);
       var duty = Duties.findOne({shift: shift._id, date: ctx.date});
       if (!duty) return;
-      return duty.brother._id === current_brother._id;
+      return duty.brother === brother._id;
     }
 
   });
@@ -112,16 +88,13 @@ if (Meteor.isClient) {
         day_number: moment(ctx.date).isoWeekday(),
         waiter_number: ctx.waiter_number
       });
-      if (!shift) {
-        return alert("shift not found, how is that possible?");
-      }
       var duty = Duties.findOne({
         shift: shift._id,
         date: ctx.date
       });
       if (duty) {
         Duties.remove(duty._id);
-        Brothers.update(duty.brother._id, {$inc: {duty_count: -1}});
+        Brothers.update(duty.brother, {$inc: {duty_count: -1}});
       }
       Duties.insert({
         shift: shift._id,
@@ -142,8 +115,8 @@ if (Meteor.isClient) {
         shift: shift._id,
         date: ctx.date
       });
-      Brothers.update(duty.brother._id, {$inc: {duty_count: -1}});
       Duties.remove(duty._id);
+      Brothers.update(duty.brother, {$inc: {duty_count: -1}});
     }
 
   });

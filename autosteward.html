@@ -48,7 +48,13 @@
       <table class="table table-bordered table-striped">
       <tbody>
         {{#each brothers}}
-          {{> slab}}
+          <tr>
+            <td>{{> brotherName }}</td>
+            <td>
+              {{> slab }}
+            </td>
+            {{> phone }}
+          </tr>
         {{/each}}
       </tbody>
       </table>
@@ -61,57 +67,55 @@
 
 </body>
 
+<template name="brotherName">
+  {{first_name}} {{last_name}} ({{duty_count}})
+</template>
+
 <template name="cell">
   <td>
     <div class="dropdown">
-      {{#if anyAvailableWaiters date waiter_number}}
-        <button id="dLabel" type="button" class="btn btn-default" data-toggle="dropdown">
-          {{#with waiter date waiter_number}}
-            {{first_name}} {{last_name}} ({{duty_count}})
-          {{else}}
-            <em>Nobody</em>
-          {{/with}}
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-          {{#with waiter date waiter_number}}
-            <li>
-              <a href="#" class="unassign-waiter">
-                <em>Remove {{brother.first_name}}</em>
-              </a>
-            </li>
-          {{/with}}
-          {{#each availableWaiters date waiter_number}}
-            {{#unless currentBrotherIsWaiter}}
+      {{#with shift date waiter_number}}
+        {{#if anyAvailableWaiters}}
+          <button id="dLabel" type="button" class="btn btn-default" data-toggle="dropdown">
+            {{#with waiter}}
+              {{> brotherName }}
+            {{else}}
+              <em>Nobody</em>
+            {{/with}}
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            {{#with waiter}}
               <li>
-                <a href="#" class="assign-waiter">{{first_name}} {{last_name}} ({{duty_count}})</a>
+                <a href="#" class="unassign-waiter">
+                  <em>Remove {{brother.first_name}}</em>
+                </a>
               </li>
-            {{/unless}}
-          {{/each}}
-        </ul>
-      {{else}}
-        <em>nobody available</em>
-      {{/if}}
+            {{/with}}
+            {{#each availableWaiters}}
+              {{#unless brotherIsWaiter this}}
+                <li>
+                  <a href="#" class="assign-waiter">{{> brotherName }}</a>
+                </li>
+              {{/unless}}
+            {{/each}}
+          </ul>
+        {{else}}
+          <em>no brothers available</em>
+        {{/if}}
+      {{/with}}
     </div>
   </td>
 </template>
 
 <template name="slab">
-  <tr>
-    <td>{{first_name}} {{last_name}} ({{duty_count}})</td>
-
-    <td>
-      {{#each shifts}}
-        {{#if currentBrotherHasShift}}
-          <button class="remove btn btn-small btn-success">{{day_name}} #{{waiter_number}}</button>
-        {{else}}
-          <button class="add btn btn-small btn-danger">{{day_name}} #{{waiter_number}}</button>
-        {{/if}}
-      {{/each}}
-    </td>
-
-    {{>phone}}
-  </tr>
+  {{#each shifts}}
+    {{#if currentBrotherHasShift}}
+      <button class="remove btn btn-small btn-success">{{day_name}} #{{waiter_number}}</button>
+    {{else}}
+      <button class="add btn btn-small btn-danger">{{day_name}} #{{waiter_number}}</button>
+    {{/if}}
+  {{/each}}
 </template>
 
 <template name="phone">
