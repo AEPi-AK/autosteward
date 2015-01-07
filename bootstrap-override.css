@@ -36,7 +36,6 @@ tr > td:first-child {
 	font-weight: bold;
 	text-align: center;
 	padding: 25pt;
-	/*text-align: right;*/
 }
 
 .vertical-align {
@@ -49,8 +48,42 @@ tr > td:first-child {
 .phone-cell {
 	font-size: 1.8em;
 	text-align: center;
+	vertical-align: middle !important;
 }
 
 .phone-cell-problem > a {
 	color: #FF6868 !important;
+}
+
+.btn {
+	border-radius: 0; 
+	margin: -2px;
+}
+
+.add, .remove {
+	font-family: monospace;
+	font-size: 14px;
+	padding-left: 7px;
+	padding-right: 7px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-top: 2px;
+	outline: 0;
+}
+
+.slabs {
+	text-align: center;
+}
+
+.waiter-number {
+	font-size: 16px;
+}
+
+.brother-name {
+	vertical-align: middle !important;
+	text-align: center;
+}
+
+.phone-number {
+	font-weight: normal;
 }

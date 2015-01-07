@@ -45,11 +45,21 @@
   <h1>Roster</h1>
   <div class="container">
     <div class="row vertical-align">
-      <table class="table table-bordered table-striped">
-      <tbody>
+      <table class="slabs table table-bordered table-striped">
+        <tbody>
         {{#each brothers}}
           <tr>
-            <td>{{> brotherName }}</td>
+            <td class="brother-name">
+              {{first_name}} {{last_name}} ({{duty_count}})
+            <br>
+              <span class="phone-number">
+                {{#with phone_number}}
+                  {{this}}
+                {{else}}
+                  <em>no phone</em>
+                {{/with}}
+              </span>
+            </td>
             <td>
               {{> slab }}
             </td>
@@ -110,25 +120,19 @@
 
 <template name="slab">
   {{#each shifts}}
-    {{#if currentBrotherHasShift}}
-      <button class="remove btn btn-small btn-success">{{day_name}} #{{waiter_number}}</button>
-    {{else}}
-      <button class="add btn btn-small btn-danger">{{day_name}} #{{waiter_number}}</button>
-    {{/if}}
+    <button class="btn btn-small {{#if currentBrotherHasShift}}btn-success remove{{else}}btn-danger add{{/if}}">{{day_name_short}}<br><span class="waiter-number">{{waiter_number}}</span></button>
   {{/each}}
 </template>
 
 <template name="phone">
   {{#if phone_number}}
     <td class="phone-cell">
-      <a href="tel://{{phone_number}}">
-        <span class="glyphicon glyphicon-phone" data-toggle="tooltip" data-placement="top" title="{{phone_number}}"></span>
-      </a>
+      <span class="glyphicon glyphicon-phone"></span>
     </td>
   {{else}}
     <td class="phone-cell phone-cell-problem">
       <a class="add-phone" href="#">
-        <span class="glyphicon glyphicon-phone" data-toggle="tooltip" data-placement="top" title="No phone number"></span>
+        <span class="glyphicon glyphicon-phone"></span>
       </a>
     </td>
   {{/if}}

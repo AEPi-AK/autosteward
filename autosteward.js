@@ -5,6 +5,7 @@ Duties = new Mongo.Collection("duties");
 Shifts = new Mongo.Collection("shifts", {
   transform: function(shift) {
     shift.day_name = DAYS_OF_WEEK[shift.day_number - 1];
+    shift.day_name_short = shift.day_name.slice(0, 3);    
     return shift;
   }
 });
@@ -30,6 +31,29 @@ if (Meteor.isClient) {
       return _.range(1, 8).map(function(i) {
         return monday.clone().isoWeekday(i).toDate();
       });
+    },
+
+  });
+
+  Template.body.events({
+
+    "click span.phone-number": function(event, template) {
+      var current_brother = this;
+      var entered = prompt("Number:", Boolean(this.phone_number) ? this.phone_number : "");
+      var operation;
+      if (_.isNull(entered)) {
+        return;
+      }
+      else if (entered.match(/^\d{3}-\d{3}-\d{4}$/)) {
+        operation = {$set: {phone_number: entered}};
+      }
+      else if (entered === "") {
+        operation = {$unset: {phone_number: 1}};
+      }
+      else {
+        return;
+      }
+      Brothers.update(current_brother._id, operation);
     },
 
   });
@@ -121,21 +145,7 @@ if (Meteor.isClient) {
 
   });
 
-  Template.phone.rendered = function() {
-    // initialize tooltips
-    this.$('[data-toggle="tooltip"]').tooltip();
-  }
-
   Template.phone.events({
-
-    "click .phone-cell-problem > a": function(event, template) {
-      var number = prompt("Number:");
-      if (number !== null) {
-        Brothers.update(this._id, {$set: {phone_number: number}});
-      }
-      // XXX: find a better, more DRY, more isolated way of doing this
-      // $('[data-toggle="tooltip"]').tooltip();
-    }
 
   });
 
