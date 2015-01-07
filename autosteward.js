@@ -38,22 +38,20 @@ if (Meteor.isClient) {
   Template.body.events({
 
     "click span.phone-number": function(event, template) {
-      var current_brother = this;
       var entered = prompt("Number:", Boolean(this.phone_number) ? this.phone_number : "");
-      var operation;
       if (_.isNull(entered)) {
         return;
       }
       else if (entered.match(/^\d{3}-\d{3}-\d{4}$/)) {
-        operation = {$set: {phone_number: entered}};
+        Brothers.update(this._id, {
+          $set: {phone_number: entered}
+        });
       }
       else if (entered === "") {
-        operation = {$unset: {phone_number: 1}};
+        Brothers.update(this._id, {
+          $unset: {phone_number: entered}
+        });
       }
-      else {
-        return;
-      }
-      Brothers.update(current_brother._id, operation);
     },
 
   });
