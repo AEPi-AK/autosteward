@@ -101,7 +101,7 @@ if (Meteor.isClient) {
         brother: current_brother._id,
         date: ctx.date
       });
-      Brothers.update(current_brother._id, {$inc: {duty_count: 1}});
+      Brothers.update(current_brother._id, {$inc: {duty_count: +1}});
     },
 
     "click a.unassign-waiter": function() {
@@ -133,8 +133,8 @@ if (Meteor.isClient) {
       if (number !== null) {
         Brothers.update(this._id, {$set: {phone_number: number}});
       }
-      // FIXME: we need to trigger re-render to update tooltip
-      // template.view._render();
+      // XXX: find a better, more DRY, more isolated way of doing this
+      // $('[data-toggle="tooltip"]').tooltip();
     }
 
   });

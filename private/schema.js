@@ -32,4 +32,3 @@ Brother = {
   duty_count: Number, // read-only denormalization, never set directly
 
 };
-
