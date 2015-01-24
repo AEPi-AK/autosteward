@@ -60,6 +60,14 @@ tr > td:first-child {
 	margin: -2px;
 }
 
+.btn:focus{
+    outline: none;   
+}
+
+.btn:active{
+    outline: none !important;   
+}
+
 .add, .remove {
 	font-family: monospace;
 	font-size: 14px;
