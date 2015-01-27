@@ -72,7 +72,7 @@ if (Meteor.isClient) {
 
   });
 
-  Template.cell.helpers({
+  ReadOnlyCellHelpers = {
 
     shift: function(date, waiter_number) {
       return Shifts.findOne({
@@ -88,7 +88,11 @@ if (Meteor.isClient) {
       var duty = Duties.findOne({shift: shift._id, date: ctx.date});
       if (!duty) return;
       return Brothers.findOne(duty.brother);
-    },
+    }
+
+  };
+
+  EditableCellHelpers = {
 
     availableWaiters: function() {
       var shift = this;
@@ -114,9 +118,12 @@ if (Meteor.isClient) {
       return duty.brother === brother._id;
     }
 
-  });
+  };
 
-  Template.cell.events({
+  Template.editableCell.helpers(_.extend(ReadOnlyCellHelpers, EditableCellHelpers));
+  Template.readonlyCell.helpers(ReadOnlyCellHelpers);
+
+  Template.editableCell.events({
 
     "click a.assign-waiter": function() {
       var current_brother = this;

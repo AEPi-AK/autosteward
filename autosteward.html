@@ -38,9 +38,15 @@
                 {{#each datesOfCurrentWeek}}
                   <tr>
                     <td>{{formatDate this "dddd"}}</td>
-                    {{> cell date=this waiter_number=1}}
-                    {{> cell date=this waiter_number=2}}
-                    {{> cell date=this waiter_number=3}}
+                    {{#if currentUser}}
+                      {{> editableCell date=this waiter_number=1}}
+                      {{> editableCell date=this waiter_number=2}}
+                      {{> editableCell date=this waiter_number=3}}
+                    {{else}}
+                      {{> readonlyCell date=this waiter_number=1}}
+                      {{> readonlyCell date=this waiter_number=2}}
+                      {{> readonlyCell date=this waiter_number=3}}
+                    {{/if}}
                   </tr>
                 {{/each}}
               </tbody>
@@ -54,34 +60,36 @@
     </div>
   </div>
 
-  <h1>Roster</h1>
-  <div class="container">
-    <div class="row vertical-align">
-      <table class="slabs table table-bordered table-striped">
-        <tbody>
-        {{#each brothers}}
-          <tr>
-            <td class="brother-name">
-              {{first_name}} {{last_name}} ({{duty_count}})
-            <br>
-              <span class="phone-number">
-                {{#with phone_number}}
-                  {{this}}
-                {{else}}
-                  <em>no phone</em>
-                {{/with}}
-              </span>
-            </td>
-            <td>
-              {{> slab }}
-            </td>
-            {{> phone }}
-          </tr>
-        {{/each}}
-      </tbody>
-      </table>
+  {{#if currentUser}}
+    <h1>Roster</h1>
+    <div class="container">
+      <div class="row vertical-align">
+        <table class="slabs table table-bordered table-striped">
+          <tbody>
+          {{#each brothers}}
+            <tr>
+              <td class="brother-name">
+                {{first_name}} {{last_name}} ({{duty_count}})
+              <br>
+                <span class="phone-number">
+                  {{#with phone_number}}
+                    {{this}}
+                  {{else}}
+                    <em>no phone</em>
+                  {{/with}}
+                </span>
+              </td>
+              <td>
+                {{> slab }}
+              </td>
+              {{> phone }}
+            </tr>
+          {{/each}}
+        </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  {{/if}}
 
   <div class="footer">
     <span>&copy; 2015 AEPi Alpha Kappa</span>
@@ -93,7 +101,7 @@
   {{first_name}} {{last_name}} ({{duty_count}})
 </template>
 
-<template name="cell">
+<template name="editableCell">
   <td>
     <div class="dropdown">
       {{#with shift date waiter_number}}
@@ -125,6 +133,16 @@
         {{else}}
           <em>no brothers available</em>
         {{/if}}
+      {{/with}}
+    </div>
+  </td>
+</template>
+
+<template name="readonlyCell">
+  <td>
+    <div class="dropdown">
+      {{#with shift date waiter_number}}
+        {{waiter.first_name}} {{waiter.last_name}}
       {{/with}}
     </div>
   </td>
