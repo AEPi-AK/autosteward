@@ -5,6 +5,18 @@
 
 <body>
   <div class="container">
+    <div id="header">
+      {{#if currentUser}}
+        <h4>Signed in as: <strong>{{currentUser.profile.name}}</strong></h4>
+        <a href="#" class="btn btn-large btn-danger" id="log-out">Log out</a>
+      {{else}}
+        {{#if loggingIn }}
+          <em>Logging in...</em>
+        {{else}}
+          <a href="#" class="btn btn-large btn-success" id="log-in">Log in</a>
+        {{/if}}
+      {{/if}}
+    </div>
     <div class="row vertical-align">
       <div class="col-md-1 pager">
         &#x25C0;

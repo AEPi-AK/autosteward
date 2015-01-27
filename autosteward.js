@@ -37,6 +37,22 @@ if (Meteor.isClient) {
 
   Template.body.events({
 
+    "click #log-in": function() {
+      Meteor.loginWithGoogle(function callback(err) {
+        if (err) {
+          alert(err);
+        }
+      });
+    },
+
+    "click #log-out": function() {
+      Meteor.logout(function callback(err) {
+        if (err) {
+          alert(err);
+        }
+      });
+    },
+
     "click span.phone-number": function(event, template) {
       var entered = prompt("Number:", Boolean(this.phone_number) ? this.phone_number : "");
       if (_.isNull(entered)) {
@@ -185,6 +201,21 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
+
+  ADMIN_EMAILS = [
+    'aromanof@andrew.cmu.edu',
+    'afrieder@andrew.cmu.edu'
+  ];
+
+  Accounts.validateNewUser(function (user) {
+    console.log(user);
+    if (ADMIN_EMAILS.indexOf(user.services.google.email) !== -1) {
+      return true;
+    }
+    throw new Meteor.Error(403, "Email account not on whitelist.");
+  });
+
+
   Meteor.startup(function () {
 
     function addFixtures(collection, fixtures) {

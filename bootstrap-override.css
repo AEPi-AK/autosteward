@@ -19,6 +19,12 @@ h2 > span {
 	font-weight: 400;
 }
 
+h4 {
+	display: inline;
+	vertical-align: middle;
+	margin-right: 10px;
+}
+
 tr > td:first-child {
 	font-weight: bold;
 }
@@ -55,7 +61,7 @@ tr > td:first-child {
 	color: #FF6868 !important;
 }
 
-.btn {
+button.btn {
 	border-radius: 0; 
 	margin: -2px;
 }
@@ -94,4 +100,9 @@ tr > td:first-child {
 
 .phone-number {
 	font-weight: normal;
+}
+
+#header {
+	text-align: right;
+	margin-top: 25px;
 }
