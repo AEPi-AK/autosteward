@@ -226,6 +226,17 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
 
+    ServiceConfiguration.configurations.upsert(
+      { service: "google" },
+      {
+        $set: {
+          clientId: "963066814234-45h684so8c720mimkmlaf57isutqpl2p.apps.googleusercontent.com",
+          loginStyle: "popup",
+          secret: process.env.GOOGLE_OAUTH_SECRET
+        }
+      }
+    );
+
   ADMIN_EMAILS = [
     'aromanof@andrew.cmu.edu',
     'afrieder@andrew.cmu.edu'
