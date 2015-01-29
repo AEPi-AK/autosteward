@@ -7,7 +7,7 @@ body {
 
 h1 {
 	text-align: center;
-	padding: 20pt;
+	padding: 15px;
 }
 
 h2 {
@@ -105,4 +105,8 @@ button.btn {
 #header {
 	text-align: right;
 	margin-top: 25px;
+}
+
+#add-brother {
+	margin-bottom: 20px;
 }

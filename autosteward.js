@@ -53,6 +53,23 @@ if (Meteor.isClient) {
       });
     },
 
+    "click #add-brother": function() {
+      var first_name = prompt("First Name:");
+      if (_.isNull(first_name)) {
+        return;
+      }
+      var last_name = prompt("Last Name:");
+      if (_.isNull(last_name)) {
+        return;
+      }
+      Brothers.insert({
+        first_name: first_name,
+        last_name: last_name,
+        phone_number: null,
+        duty_count: 0
+      });
+    },
+
     "click span.phone-number": function(event, template) {
       var entered = prompt("Number:", Boolean(this.phone_number) ? this.phone_number : "");
       if (_.isNull(entered)) {
