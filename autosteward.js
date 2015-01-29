@@ -232,7 +232,7 @@ if (Meteor.isServer) {
         $set: {
           clientId: "963066814234-45h684so8c720mimkmlaf57isutqpl2p.apps.googleusercontent.com",
           loginStyle: "popup",
-          secret: process.env.GOOGLE_OAUTH_SECRET
+          secret: "6jxJaywxWqnA7sxyiSpETqOC"
         }
       }
     );
