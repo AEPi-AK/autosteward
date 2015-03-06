@@ -231,13 +231,13 @@ if (Meteor.isServer) {
     'afrieder@andrew.cmu.edu'
   ];
 
-  Accounts.validateNewUser(function (user) {
-    console.log(user);
-    if (ADMIN_EMAILS.indexOf(user.services.google.email) !== -1) {
-      return true;
-    }
-    throw new Meteor.Error(403, "Email account not on whitelist.");
-  });
+  // Accounts.validateNewUser(function (user) {
+  //   console.log(user);
+  //   if (ADMIN_EMAILS.indexOf(user.services.google.email) !== -1) {
+  //     return true;
+  //   }
+  //   throw new Meteor.Error(403, "Email account not on whitelist.");
+  // });
 
 
   Meteor.startup(function () {
