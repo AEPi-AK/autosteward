@@ -1,3 +1,7 @@
+Meteor.subscribe("brothers");
+Meteor.subscribe("duties");
+Meteor.subscribe("shifts");
+
 Template.registerHelper("formatDate", function(date, format_string) {
   return moment(date).format(format_string);
 });
