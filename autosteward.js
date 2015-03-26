@@ -5,7 +5,7 @@ Duties = new Mongo.Collection("duties");
 Shifts = new Mongo.Collection("shifts", {
   transform: function(shift) {
     shift.day_name = DAYS_OF_WEEK[shift.day_number - 1];
-    shift.day_name_short = shift.day_name.slice(0, 3);    
+    shift.day_name_short = shift.day_name.slice(0, 3);
     return shift;
   }
 });
@@ -62,7 +62,8 @@ if (Meteor.isClient) {
       if (_.isNull(last_name)) {
         return;
       }
-      Brothers.insert({
+
+      Meteor.call("addBrother", {
         first_name: first_name,
         last_name: last_name,
         phone_number: null,
@@ -76,14 +77,10 @@ if (Meteor.isClient) {
         return;
       }
       else if (entered.match(/^\d{3}-\d{3}-\d{4}$/)) {
-        Brothers.update(this._id, {
-          $set: {phone_number: entered}
-        });
+        Meteor.call("setBrotherPhoneNumber", this._id, entered);
       }
       else if (entered === "") {
-        Brothers.update(this._id, {
-          $unset: {phone_number: entered}
-        });
+        Meteor.call("removeBrotherPhoneNumber", this._id);
       }
     },
 
@@ -114,7 +111,7 @@ if (Meteor.isClient) {
     availableWaiters: function() {
       var shift = this;
       return Brothers.find({
-        _id: {$in: shift.available_brothers} 
+        _id: {$in: shift.available_brothers}
       }, {
         sort: {duty_count: 1}
       });
@@ -123,7 +120,7 @@ if (Meteor.isClient) {
     anyAvailableWaiters: function() {
       var shift = this;
       return Brothers.find({
-        _id: {$in: shift.available_brothers} 
+        _id: {$in: shift.available_brothers}
       }).count() > 0;
     },
 
@@ -138,6 +135,7 @@ if (Meteor.isClient) {
   };
 
   Template.editableCell.helpers(_.extend(ReadOnlyCellHelpers, EditableCellHelpers));
+
   Template.readonlyCell.helpers(ReadOnlyCellHelpers);
 
   Template.editableCell.events({
@@ -150,20 +148,8 @@ if (Meteor.isClient) {
         day_number: moment(ctx.date).isoWeekday(),
         waiter_number: ctx.waiter_number
       });
-      var duty = Duties.findOne({
-        shift: shift._id,
-        date: ctx.date
-      });
-      if (duty) {
-        Duties.remove(duty._id);
-        Brothers.update(duty.brother, {$inc: {duty_count: -1}});
-      }
-      Duties.insert({
-        shift: shift._id,
-        brother: current_brother._id,
-        date: ctx.date
-      });
-      Brothers.update(current_brother._id, {$inc: {duty_count: +1}});
+
+      Meteor.call("createDutyForBrother", shift._id, current_brother._id, ctx.date);
     },
 
     "click a.unassign-waiter": function() {
@@ -173,17 +159,8 @@ if (Meteor.isClient) {
         day_number: moment(ctx.date).isoWeekday(),
         waiter_number: ctx.waiter_number
       });
-      var duty = Duties.findOne({
-        shift: shift._id,
-        date: ctx.date
-      });
-      Duties.remove(duty._id);
-      Brothers.update(duty.brother, {$inc: {duty_count: -1}});
+      Meteor.call("removeDutyForBrother", shift._id, ctx.date);
     }
-
-  });
-
-  Template.phone.events({
 
   });
 
@@ -210,21 +187,80 @@ if (Meteor.isClient) {
   Template.slab.events({
 
     "click button.add": function() {
-      Shifts.update(this._id, {
-        $addToSet: {available_brothers: this.current_brother_id}
-      });
+      Meteor.call("assignBrotherToShift", this._id, this.current_brother_id);
     },
 
     "click button.remove": function() {
-      Shifts.update(this._id, {
-        $pull: {available_brothers: this.current_brother_id}
-      });
+      Meteor.call("removeBrotherFromShift", this._id, this.current_brother_id);
     }
 
   });
 }
 
 if (Meteor.isServer) {
+
+    Meteor.methods({
+
+      addBrother: function (brother) {
+        Brothers.insert({
+          first_name: brother.first_name,
+          last_name: brother.last_name,
+          phone_number: brother.phone_number,
+          duty_count: brother.duty_count
+        });
+      },
+
+      setBrotherPhoneNumber: function (brotherId, phoneNumber) {
+        Brothers.update(brotherId, {
+          $set: {phone_number: phoneNumber}
+        });
+      },
+
+      removeBrotherPhoneNumber: function (brotherId, phoneNumber) {
+        Brothers.update(brotherId, {
+          $unset: {phone_number: 1}
+        });
+      },
+
+      assignBrotherToShift: function (shiftId, brotherId) {
+        Shifts.update(shiftId, {
+          $addToSet: {available_brothers: brotherId}
+        });
+      },
+
+      removeBrotherFromShift: function (shiftId, brotherId) {
+        Shifts.update(shiftId, {
+          $pull: {available_brothers: brotherId}
+        });
+      },
+
+      createDutyForBrother: function (shiftId, brotherId, date) {
+        var duty = Duties.findOne({
+          shift: shiftId,
+          date: date
+        });
+        if (duty) {
+          Duties.remove(duty._id);
+          Brothers.update(duty.brother, {$inc: {duty_count: -1}});
+        }
+        Duties.insert({
+          shift: shiftId,
+          brother: brotherId,
+          date: date
+        });
+        Brothers.update(brotherId, {$inc: {duty_count: +1}});
+      },
+
+      removeDutyForBrother: function (shiftId, date) {
+        var duty = Duties.findOne({
+          shift: shiftId,
+          date: date
+        });
+        Duties.remove(duty._id);
+        Brothers.update(duty.brother, {$inc: {duty_count: -1}});
+      },
+
+    });
 
     ServiceConfiguration.configurations.upsert(
       { service: "google" },
@@ -242,14 +278,13 @@ if (Meteor.isServer) {
     'afrieder@andrew.cmu.edu'
   ];
 
-  // Accounts.validateNewUser(function (user) {
-  //   console.log(user);
-  //   if (ADMIN_EMAILS.indexOf(user.services.google.email) !== -1) {
-  //     return true;
-  //   }
-  //   throw new Meteor.Error(403, "Email account not on whitelist.");
-  // });
-
+  Accounts.validateNewUser(function (user) {
+    console.log(user);
+    if (ADMIN_EMAILS.indexOf(user.services.google.email) !== -1) {
+      return true;
+    }
+    throw new Meteor.Error(403, "Email account not on whitelist.");
+  });
 
   Meteor.startup(function () {
 
