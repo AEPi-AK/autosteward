@@ -159,6 +159,18 @@ Template.editableCell.events({
 
 });
 
+Template.brotherName.helpers({
+
+  recentlyServedDuty: function() {
+    var current_brother = this;
+    return Duties.find({
+      brother: this._id,
+      date: {$gte: moment().subtract(7, "days").toDate()}
+    }).count() > 0;
+  }
+
+});
+
 Template.slab.helpers({
 
   currentBrotherHasShift: function() {

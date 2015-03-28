@@ -109,7 +109,11 @@
 </body>
 
 <template name="brotherName">
-  {{first_name}} {{last_name}} ({{duty_count}})
+  {{#if recentlyServedDuty}}
+    <span style="color:red">{{first_name}} {{last_name}} ({{duty_count}})</span>
+  {{else}}
+    {{first_name}} {{last_name}} ({{duty_count}})
+  {{/if}}
 </template>
 
 <template name="editableCell">
