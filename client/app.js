@@ -45,11 +45,11 @@ Template.body.events({
 
   "click #add-brother": function() {
     var first_name = prompt("First Name:");
-    if (_.isNull(first_name)) {
+    if (_.isNull(first_name) || first_name == "") {
       return;
     }
     var last_name = prompt("Last Name:");
-    if (_.isNull(last_name)) {
+    if (_.isNull(last_name) || last_name == "") {
       return;
     }
 
@@ -59,6 +59,11 @@ Template.body.events({
       phone_number: null,
       duty_count: 0
     });
+  },
+
+  "click a.delete-brother": function() {
+    console.log(this._id);
+    Meteor.call("removeBrother", this._id);
   },
 
   "click span.phone-number": function(event, template) {

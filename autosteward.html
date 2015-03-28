@@ -89,7 +89,11 @@
               <td>
                 {{> slab }}
               </td>
-              {{> phone }}
+              <td class="button-cell">
+                <a class="delete-brother" href="#">
+                  <span class="glyphicon glyphicon-remove-circle"></span>
+                </a>
+              </td>
             </tr>
           {{/each}}
         </tbody>
@@ -159,18 +163,4 @@
   {{#each shifts}}
     <button class="btn btn-small {{#if currentBrotherHasShift}}btn-success remove{{else}}btn-danger add{{/if}}">{{day_name_short}}<br><span class="waiter-number">{{waiter_number}}</span></button>
   {{/each}}
-</template>
-
-<template name="phone">
-  {{#if phone_number}}
-    <td class="phone-cell">
-      <span class="glyphicon glyphicon-phone"></span>
-    </td>
-  {{else}}
-    <td class="phone-cell phone-cell-problem">
-      <a class="add-phone" href="#">
-        <span class="glyphicon glyphicon-phone"></span>
-      </a>
-    </td>
-  {{/if}}
 </template>
