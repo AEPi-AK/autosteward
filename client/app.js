@@ -61,6 +61,12 @@ Template.body.events({
     });
   },
 
+  "click #reset-duties": function() {
+    if (!confirm("Are you sure?")) return;
+
+    Meteor.call("resetDuties");
+  },
+
   "click a.delete-brother": function() {
     console.log(this._id);
     Meteor.call("removeBrother", this._id);
