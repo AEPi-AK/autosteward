@@ -71,11 +71,11 @@ Template.body.events({
     if (_.isNull(entered)) {
       return;
     }
-    else if (entered.match(/^\d{3}-\d{3}-\d{4}$/)) {
-      Meteor.call("setBrotherPhoneNumber", this._id, entered);
-    }
     else if (entered === "") {
       Meteor.call("removeBrotherPhoneNumber", this._id);
+    }
+    else {
+      Meteor.call("setBrotherPhoneNumber", this._id, entered);
     }
   },
 
