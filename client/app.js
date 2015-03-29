@@ -2,6 +2,8 @@ Meteor.subscribe("brothers");
 Meteor.subscribe("duties");
 Meteor.subscribe("shifts");
 
+Session.set("weekOffset", 0);
+
 Template.registerHelper("formatDate", function(date, format_string) {
   return moment(date).format(format_string);
 });
@@ -13,11 +15,20 @@ Template.body.helpers({
   },
 
   week: function() {
-    return moment().startOf('isoweek').toDate();
+    return moment()
+    .startOf('isoweek')
+    .add(Session.get("weekOffset"), 'weeks')
+    .toDate();
+  },
+
+  weekHasBeenOffset: function() {
+    return Session.get("weekOffset") !== 0;
   },
 
   datesOfCurrentWeek: function() {
-    var monday = moment().startOf('isoweek');
+    var monday = moment()
+    .startOf('isoweek')
+    .add(Session.get("weekOffset"), 'weeks');
     return _.range(1, 8).map(function(i) {
       return monday.clone().isoWeekday(i).toDate();
     });
@@ -41,6 +52,18 @@ Template.body.events({
         alert(err);
       }
     });
+  },
+
+  "click #prev-week": function() {
+    Session.set("weekOffset", Session.get("weekOffset") - 1);
+  },
+
+  "click #next-week": function() {
+    Session.set("weekOffset", Session.get("weekOffset") + 1);
+  },
+
+  "click #jump-to-today": function() {
+    Session.set("weekOffset", 0);
   },
 
   "click #add-brother": function() {
