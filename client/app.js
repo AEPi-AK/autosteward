@@ -113,7 +113,7 @@ ReadOnlyCellHelpers = {
 
   shift: function(date, waiter_number) {
     return Shifts.findOne({
-      semester: "2014-spring",
+      semester: CURRENT_SEMESTER,
       day_number: moment(date).isoWeekday(),
       waiter_number: waiter_number
     });
@@ -167,7 +167,7 @@ Template.editableCell.events({
     var current_brother = this;
     var ctx = Template.currentData();
     var shift = Shifts.findOne({
-      semester: "2014-spring",
+      semester: CURRENT_SEMESTER,
       day_number: moment(ctx.date).isoWeekday(),
       waiter_number: ctx.waiter_number
     });
@@ -178,7 +178,7 @@ Template.editableCell.events({
   "click a.unassign-waiter": function() {
     var ctx = Template.currentData();
     var shift = Shifts.findOne({
-      semester: "2014-spring",
+      semester: CURRENT_SEMESTER,
       day_number: moment(ctx.date).isoWeekday(),
       waiter_number: ctx.waiter_number
     });
@@ -209,7 +209,7 @@ Template.slab.helpers({
     var current_brother = this;
 
     return Shifts.find({
-      semester: "2014-spring"
+      semester: CURRENT_SEMESTER
     }, {sort: {day_number: 1, waiter_number: 1}}
     ).map(function(shift) {
       shift.current_brother_id = current_brother._id;

@@ -34,7 +34,7 @@ DAYS_OF_WEEK.forEach(function(day) {
   var num_waiters = is_weekend ? 1 : 3;
   while (num_waiters > 0) {
     shifts.push({
-      semester: "2014-spring",
+      semester: CURRENT_SEMESTER,
       day_number: DAYS_OF_WEEK.indexOf(day) + 1,
       waiter_number: num_waiters,
       available_brothers: []

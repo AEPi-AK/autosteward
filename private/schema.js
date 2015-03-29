@@ -1,7 +1,7 @@
 
 Shift = {
 
-  semester: String, // e.g. "2014-spring"
+  semester: String, // e.g. "2015-spring"
 
   day_number: Number, // {1,2,3,4,5,6,7} (ISO weekday)
 
