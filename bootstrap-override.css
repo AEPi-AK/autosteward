@@ -29,12 +29,8 @@ tr > td:first-child {
 	font-weight: bold;
 }
 
-.pager {
-	font-size: 50px;
-	text-align: right;
-	vertical-align: middle;
+.calendar-pager {
 	opacity: 0.95;
-	marign-top: 50px !important;
 }
 
 .footer {

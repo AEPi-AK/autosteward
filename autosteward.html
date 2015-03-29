@@ -18,12 +18,13 @@
       {{/if}}
     </div>
     <div class="row vertical-align">
-      <div class="col-md-1 pager">
-        &#x25C0;
-      </div>
-      <div class="col-md-10">
+      <div class="col-md-8 col-md-offset-2">
         {{#with week}}
-          <h1>Week of <span>{{formatDate this "MMMM D"}}</span></h1>
+          <h1>
+            <span class="calendar-pager"> &#x25C0; </span>
+            Week of <span>{{formatDate this "MMMM D"}}</span>
+            <span class="calendar-pager"> &#x25B6; </span>
+          </h1>
           <div class="panel panel-default">
             <table class="table table-striped table-bordered">
               <thead>
@@ -53,9 +54,6 @@
             </table>
           </div>
         {{/with}}
-      </div>
-      <div class="col-md-1 pager">
-          &#x25B6;
       </div>
     </div>
   </div>
