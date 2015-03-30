@@ -91,13 +91,13 @@ Template.body.events({
 
   "click #reset-duties": function(event) {
     event.preventDefault();
-    if (!confirm("Really reset all duties? There's no easy way to undo this."));
+    if (!confirm("Really reset all duties? There's no easy way to undo this.")) return;
     Meteor.call("resetDuties");
   },
 
   "click a.delete-brother": function(event) {
     event.preventDefault();
-    if (!confirm("Really delete Brother " + this.last_name + "?"));
+    if (!confirm("Really delete Brother " + this.last_name + "?")) return;
     Meteor.call("removeBrother", this._id);
   },
 
