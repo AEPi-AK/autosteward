@@ -74,10 +74,17 @@
           <span class="glyphicon glyphicon-plus"></span>
           Add Brother
         </a>
-        <a href="#" id="reset-duties" class="btn btn-warning">
-          <span class="glyphicon glyphicon-fire"></span>
-          Reset All Duties
-        </a>
+        {{#if canResetDuties}}
+          <a href="#" id="reset-duties" class="btn btn-warning">
+            <span class="glyphicon glyphicon-fire"></span>
+            Reset All Duties
+          </a>
+        {{else}}
+          <a href="#" class="btn btn-warning disabled">
+            <span class="glyphicon glyphicon-fire"></span>
+            Reset All Duties
+          </a>
+        {{/if}}
       </div>
     </div>
     <div class="container">
