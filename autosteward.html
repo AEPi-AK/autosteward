@@ -22,48 +22,47 @@
         {{/if}}
       </div>
     </div>
-    <div class="row vertical-align">
-      <div class="col-md-8 col-md-offset-2">
-        {{#with week}}
-          <h1>
-            {{#if weekHasBeenOffset}}
-              <a href="#" id="jump-to-today">Jump back to today?</a>
-            {{/if}}
-            <a href="#" class="calendar-pager" id="prev-week"> &#x25C0; </a>
-            Week of <span>{{formatDate this "MMMM D"}}</span>
-            <a href="#" class="calendar-pager" id="next-week"> &#x25B6; </a>
-          </h1>
-          <div class="panel panel-default">
-            <table class="table table-striped table-bordered">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Waiter 1</th>
-                  <th>Waiter 2</th>
-                  <th>Waiter 3</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#each datesOfCurrentWeek}}
-                  <tr>
-                    <td>{{formatDate this "dddd"}}</td>
-                    {{#if currentUser}}
-                      {{> editableCell date=this waiter_number=1}}
-                      {{> editableCell date=this waiter_number=2}}
-                      {{> editableCell date=this waiter_number=3}}
-                    {{else}}
-                      {{> readonlyCell date=this waiter_number=1}}
-                      {{> readonlyCell date=this waiter_number=2}}
-                      {{> readonlyCell date=this waiter_number=3}}
-                    {{/if}}
-                  </tr>
-                {{/each}}
-              </tbody>
-            </table>
-          </div>
-        {{/with}}
+  </div>
+
+  <div class="container">
+    {{#with week}}
+      <h1>
+        {{#if weekHasBeenOffset}}
+          <a href="#" id="jump-to-today">Jump back to today?</a>
+        {{/if}}
+        <a href="#" class="calendar-pager" id="prev-week"> &#x25C0; </a>
+        Week of <span>{{formatDate this "MMMM D"}}</span>
+        <a href="#" class="calendar-pager" id="next-week"> &#x25B6; </a>
+      </h1>
+      <div class="panel panel-default">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Waiter 1</th>
+              <th>Waiter 2</th>
+              <th>Waiter 3</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each datesOfCurrentWeek}}
+              <tr>
+                <td>{{formatDate this "dddd"}}</td>
+                {{#if currentUser}}
+                  {{> editableCell date=this waiter_number=1}}
+                  {{> editableCell date=this waiter_number=2}}
+                  {{> editableCell date=this waiter_number=3}}
+                {{else}}
+                  {{> readonlyCell date=this waiter_number=1}}
+                  {{> readonlyCell date=this waiter_number=2}}
+                  {{> readonlyCell date=this waiter_number=3}}
+                {{/if}}
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
       </div>
-    </div>
+    {{/with}}
   </div>
 
   {{#if currentUser}}
@@ -88,7 +87,6 @@
       </div>
     </div>
     <div class="container">
-
       <div class="row vertical-align">
         <table class="slabs table table-bordered table-striped">
           <tbody>
