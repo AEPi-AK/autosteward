@@ -159,9 +159,19 @@
             {{/with}}
             {{#each availableWaiters}}
               {{#unless brotherIsWaiter this}}
-                <li>
-                  <a href="#" class="assign-waiter">{{> brotherName }}</a>
-                </li>
+                {{#if brotherHasPhone this}}
+                  <li>
+                    <a href="#" class="assign-waiter">{{> brotherName }}</a>
+                  </li>
+                {{else}}
+                  <li class="disabled">
+                    <a href="#">
+                      [need phone]
+                      <span style="text-decoration:line-through">
+                        {{> brotherName}}</span>
+                    </a>
+                  </li>
+                {{/if}}
               {{/unless}}
             {{/each}}
           </ul>

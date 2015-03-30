@@ -16,7 +16,7 @@ addFixtures(Brothers, [
   {
     first_name: "Avi",
     last_name: "Romanoff",
-    phone_number: "+1-484-431-6296",
+    phone_number: "484-431-6296",
     duty_count: 0
   },
   {

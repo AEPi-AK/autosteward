@@ -67,13 +67,13 @@ Template.body.events({
   },
 
   "click #add-brother": function() {
-    var first_name = prompt("First Name:");
+    var first_name = prompt("What's his first name?");
     if (_.isNull(first_name) || first_name == "") {
-      return;
+      return false;
     }
-    var last_name = prompt("Last Name:");
+    var last_name = prompt("What's his last name?");
     if (_.isNull(last_name) || last_name == "") {
-      return;
+      return false;
     }
 
     Meteor.call("addBrother", {
@@ -85,26 +85,32 @@ Template.body.events({
   },
 
   "click #reset-duties": function() {
-    if (!confirm("Are you sure?")) return;
+    if (!confirm("Are you sure?")) return false;
     Meteor.call("resetDuties");
   },
 
   "click a.delete-brother": function() {
-    if (!confirm("Are you sure?")) return;
+    if (!confirm("Really delete Brother " + this.last_name + "?")) return false;
     Meteor.call("removeBrother", this._id);
   },
 
   "click span.phone-number": function(event, template) {
-    var entered = prompt("Number:", Boolean(this.phone_number) ? this.phone_number : "");
+    var entered = prompt("What's Brother " + this.last_name + "'s number?\n\n" +
+      "[format: xxx-xxx-xxxx]",
+      Boolean(this.phone_number) ? this.phone_number : "");
     if (_.isNull(entered)) {
-      return;
+      return false;
     }
     else if (entered === "") {
       Meteor.call("removeBrotherPhoneNumber", this._id);
     }
     else {
-      Meteor.call("setBrotherPhoneNumber", this._id, entered);
+      Meteor.call("setBrotherPhoneNumber", this._id, entered, function(err) {
+        if (!err) return;
+        alert(err);
+      });
     }
+    event.preventDefault();
   },
 
 });
@@ -153,6 +159,10 @@ EditableCellHelpers = {
     var duty = Duties.findOne({shift: shift._id, date: ctx.date});
     if (!duty) return;
     return duty.brother === brother._id;
+  },
+
+  brotherHasPhone: function(brother) {
+    return !_.isNull(brother.phone_number);
   }
 
 };
@@ -167,7 +177,7 @@ Template.editableCell.events({
     if (!confirm(
       "WARNING: AutoSteward is live. Clicking OK will really send " +
       this.first_name + " text message reminders about this waiter" +
-      " duty. Do you REALLY want to assign this waiter duty?")) return;
+      " duty. Do you REALLY want to assign this waiter duty?")) return false;
     var current_brother = this;
     var ctx = Template.currentData();
     var shift = Shifts.findOne({
