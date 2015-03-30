@@ -19,5 +19,5 @@ Accounts.validateNewUser(function (user) {
   if (ADMIN_EMAILS.indexOf(user.services.google.email) !== -1) {
     return true;
   }
-  throw new Meteor.Error(403, "Email account not on whitelist.");
+  throw new Meteor.Error("invalid-email", "Email account not on whitelist.");
 });
