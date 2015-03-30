@@ -48,11 +48,23 @@ tr > td:first-child {
 	margin-top: -27px;
 }
 
-.footer {
+#header {
+	margin-top: 25px;
+}
+
+#footer {
 	font-size: 12pt;
-	font-weight: bold;
 	text-align: center;
 	padding: 25pt;
+	margin-bottom: 25px;
+}
+
+.footer > .copyright {
+	font-weight: bold;
+}
+
+.footer > .closing {
+	font-style: italic;
 }
 
 .vertical-align {
@@ -111,11 +123,6 @@ button.btn {
 
 .phone-number {
 	font-weight: normal;
-}
-
-#header {
-	/*text-align: right;*/
-	margin-top: 25px;
 }
 
 .report-bug {
