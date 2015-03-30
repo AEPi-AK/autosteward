@@ -10,3 +10,5 @@ accounts-ui
 accounts-google
 twbs:bootstrap
 service-configuration
+accolver:twilio-meteor
+chfritz:easycron
