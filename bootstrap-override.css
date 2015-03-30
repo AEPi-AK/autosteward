@@ -72,10 +72,6 @@ tr > td:first-child {
 	color: black !important;
 }
 
-/*.phone-cell-problem > a {
-	color: #FF6868 !important;
-}*/
-
 button.btn {
 	border-radius: 0;
 	margin: -2px;
@@ -118,8 +114,12 @@ button.btn {
 }
 
 #header {
-	text-align: right;
+	/*text-align: right;*/
 	margin-top: 25px;
+}
+
+.report-bug {
+	font-size: 18px;
 }
 
 #add-brother {

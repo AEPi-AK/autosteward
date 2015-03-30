@@ -6,16 +6,21 @@
 <body>
   <div class="container">
     <div id="header">
-      {{#if currentUser}}
-        <h4>Signed in as: <strong>{{currentUser.profile.name}}</strong></h4>
-        <a href="#" class="btn btn-large btn-danger" id="log-out">Log out</a>
-      {{else}}
-        {{#if loggingIn }}
-          <em>Logging in...</em>
+      <div class="pull-left">
+        <a href="https://github.com/AEPi-AK/autosteward/issues/new" class="report-bug">Found a bug?</a>
+      </div>
+      <div class="pull-right">
+        {{#if currentUser}}
+          <h4>Signed in as: <strong>{{currentUser.profile.name}}</strong></h4>
+          <a href="#" class="btn btn-large btn-danger" id="log-out">Log out</a>
         {{else}}
-          <a href="#" class="btn btn-large btn-success" id="log-in">Log in</a>
+          {{#if loggingIn }}
+            <em>Logging in...</em>
+          {{else}}
+            <a href="#" class="btn btn-large btn-success" id="log-in">Log in</a>
+          {{/if}}
         {{/if}}
-      {{/if}}
+      </div>
     </div>
     <div class="row vertical-align">
       <div class="col-md-8 col-md-offset-2">
