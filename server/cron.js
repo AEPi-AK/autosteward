@@ -3,12 +3,12 @@ twilio = Twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 var FROM_NUMBER = "484-309-4990";
 var templates = [
   _.template( // Reminder #1
-    "Yo <%= first_name %>, don't forget to do waiter " +
+    "Hey <%= first_name %>, don't forget to do waiter " +
     "<%= waiter_number %> by <%= deadline %> today!"
   ),
   _.template( // Reminder #2
     "If you haven't done waiter <%= waiter_number %> yet, " +
-    "do it now. Thanks Brother <%= last_name %> :)"
+    "do it now. Thanks Brother <%= last_name %>."
   ),
 ];
 
