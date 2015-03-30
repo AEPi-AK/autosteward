@@ -164,6 +164,10 @@ Template.readonlyCell.helpers(ReadOnlyCellHelpers);
 Template.editableCell.events({
 
   "click a.assign-waiter": function() {
+    if (!confirm(
+      "WARNING: AutoSteward is live. Clicking OK will really send " +
+      this.first_name + " text message reminders about this waiter" +
+      " duty. Do you REALLY want to assign this waiter duty?")) return;
     var current_brother = this;
     var ctx = Template.currentData();
     var shift = Shifts.findOne({
