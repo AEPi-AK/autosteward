@@ -212,7 +212,7 @@ Template.brotherName.helpers({
     var current_brother = this;
     return Duties.find({
       brother: this._id,
-      date: {$gte: moment().subtract(7, "days").toDate(), $lte: moment().subtract(21, "days").toDate()}
+      date: {$gte: moment().subtract(7, "days").toDate()}
     }).count() > 0;
   }
 
