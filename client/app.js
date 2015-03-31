@@ -33,7 +33,7 @@ Template.body.helpers({
     var monday = moment()
     .startOf('isoweek')
     .add(Session.get("weekOffset"), 'weeks');
-    return _.range(1,8).map(function(i) {
+    return [1,2,3,4,6,7].map(function(i) {
       return monday.clone().isoWeekday(i).toDate();
     });
   },
