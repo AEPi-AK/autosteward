@@ -123,7 +123,7 @@
     <div id="footer">
       <span class="closing">
         Built with
-         <span style="color:red">&hearts;</span> by brother
+         <span style="color:red">&hearts;</span> by Brother
          <a href="//aviromanoff.me">Romanoff</a>
        </span>
        <span>&#47;&#47;</span>
@@ -134,11 +134,13 @@
 </body>
 
 <template name="brotherName">
-  {{#if recentlyServedDuty}}
-    <span style="color:red">{{first_name}} {{last_name}} ({{duty_count}})</span>
-  {{else}}
-    {{first_name}} {{last_name}} ({{duty_count}})
-  {{/if}}
+  {{#with week}}
+    {{#if recentlyServedDuty this}}
+      <span style="color:red">{{first_name}} {{last_name}} ({{duty_count}})</span>
+    {{else}}
+      {{first_name}} {{last_name}} ({{duty_count}})
+    {{/if}}
+  {{/with}}  
 </template>
 
 <template name="editableCell">
