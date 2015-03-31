@@ -24,16 +24,8 @@
     </div>
   </div>
 
-  {{#with week}
-    <template name="brotherName">
-      {{#if recentlyServedDuty this}}
-        <span style="color:red">{{first_name}} {{last_name}} ({{duty_count}})</span>
-      {{else}}
-        {{first_name}} {{last_name}} ({{duty_count}})
-      {{/if}} 
-    </template>
-  
-    <div class="container">
+  <div class="container">
+    {{#with week}}
       <h1>
         {{#if weekHasBeenOffset}}
           <a href="#" id="jump-to-today">Jump back to today?</a>
@@ -70,8 +62,8 @@
           </tbody>
         </table>
       </div>
-    </div>
-  {{/with}}
+    {{/with}}
+  </div>
 
   {{#if currentUser}}
     <h1>Roster</h1>
@@ -141,6 +133,13 @@
 
 </body>
 
+<template name="brotherName">
+  {{#if recentlyServedDuty this}}
+    <span style="color:red">{{first_name}} {{last_name}} ({{duty_count}})</span>
+  {{else}}
+    {{first_name}} {{last_name}} ({{duty_count}})
+  {{/if}} 
+</template>
 
 <template name="editableCell">
   <td>
