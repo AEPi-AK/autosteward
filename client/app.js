@@ -208,13 +208,11 @@ Template.editableCell.events({
 
 Template.brotherName.helpers({
 
-  recentlyServedDuty: function(cur_date) {
+  recentlyServedDuty: function() {
     var current_brother = this;
-    console.log(typeof(cur_date));
-    console.log(cur_date);
     return Duties.find({
       brother: this._id,
-      date: {$gte: cur_date.subtract(14, "days").toDate(), $lte: cur_date.add(7, "days").toDate()}
+      date: {$gte: moment().subtract(14, "days").toDate(), $lte: moment().add(7, "days").toDate()}
     }).count() > 0;
   }
 
