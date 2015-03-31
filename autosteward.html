@@ -26,6 +26,14 @@
 
   <div class="container">
     {{#with week}}
+      <!-- I need this template to be here so it has access to the scope of week. Sorry if it breaks everything -->
+      <template name="brotherName">
+        {{#if recentlyServedDuty this}}
+          <span style="color:red">{{first_name}} {{last_name}} ({{duty_count}})</span>
+        {{else}}
+          {{first_name}} {{last_name}} ({{duty_count}})
+        {{/if}} 
+      </template>
       <h1>
         {{#if weekHasBeenOffset}}
           <a href="#" id="jump-to-today">Jump back to today?</a>
@@ -133,15 +141,6 @@
 
 </body>
 
-<template name="brotherName">
-  {{#with week}}
-    {{#if recentlyServedDuty this}}
-      <span style="color:red">{{first_name}} {{last_name}} ({{duty_count}})</span>
-    {{else}}
-      {{first_name}} {{last_name}} ({{duty_count}})
-    {{/if}}
-  {{/with}}  
-</template>
 
 <template name="editableCell">
   <td>
